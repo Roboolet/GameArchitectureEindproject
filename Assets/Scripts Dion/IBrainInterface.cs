@@ -1,13 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public struct InputCommand
 {
-    //public InputCommand()
-    //{
-
-    //}
+    public InputCommand(InputCommandAction _action, Vector3 _normalizedDirection, float _value)
+    {
+        action = _action;
+        normalizedDirection = _normalizedDirection;
+        value = _value;
+    }
 
     public InputCommandAction action;
     public Vector3 normalizedDirection;

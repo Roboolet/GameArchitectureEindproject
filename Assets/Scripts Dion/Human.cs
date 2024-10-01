@@ -1,11 +1,11 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
+
+// IUpdatable
 public class Human : IBrainInterface
 {
     GameObject gameObject;
+    Rigidbody rb;
 
     public SensoryData SensoryEvent { get; private set; }
 
@@ -30,15 +30,18 @@ public class Human : IBrainInterface
     private void Move(InputCommand _command)
     {
         // Move implementation
+        rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
     }
 
     private void Jump(InputCommand _command)
     {
         // Jump implementation
+        rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
     }
 
     private void Dash(InputCommand _command)
     {
         // Dash implementation
+        rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
     }
 }

@@ -1,13 +1,10 @@
-using System.Collections;
-using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 
 // : IUpdateable
 public abstract class Controller
 {
-    IBrainInterface avatar;
-    public abstract void ProcessSensoryData(SensoryData _sensoryData);
+    protected IBrainInterface Avatar { get; set; }
+    protected abstract void ProcessSensoryData(SensoryData _sensoryData);
 
     // Pumped update
     // Pumped fixedupdate
@@ -15,19 +12,29 @@ public abstract class Controller
 
 public class PlayerController : Controller
 {
-    IBrainInterface avatar;
+    private float speed = 5;
+    private float dashSpeed = 10;
 
-    public override void ProcessSensoryData(SensoryData _sensoryData)
+    protected override void ProcessSensoryData(SensoryData _sensoryData)
     {
         ;
     }
 
-    // Pumped updated
-    void Update()
+    // Pumped update
+    public void PumpedUpdate()
     {
+        Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+        Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.MOVE, movement, speed));
+
         if (Input.GetKeyDown(KeyCode.Space)) 
         {
-            avatar.ReceiveInputCommand(new InputCommand());
+            float jumpForce = 5;
+            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.JUMP, Vector3.up, jumpForce));
+        }
+
+        if (Input.GetKeyDown(KeyCode.LeftShift))
+        {
+            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.DASH, Vector3.forward, dashSpeed));
         }
     }
     // Pumped fixedupdate
