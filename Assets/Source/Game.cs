@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
@@ -6,27 +7,30 @@ using UnityEngine;
 public class Game : MonoBehaviour
 {
 
-    private IUpdateable[] updatables;
+    private IUpdateable[] updateables;
+    private CameraController cam;
 
     void Start()
     {
-        
+        cam = new CameraController();
+        updateables = new IUpdateable[1];
+        updateables[0] = cam;
     }
 
     public void Update()
     {
-        for (int i = 0; i < updatables.Length; i++)
+        for (int i = 0; i < updateables.Length; i++)
         {
-            updatables[i].PumpedUpdate();
+            updateables[i].PumpedUpdate();
         }
             
     }
 
     public void FixedUpdate()
     {
-        for (int i = 0; i < updatables.Length; i++)
+        for (int i = 0; i < updateables.Length; i++)
         {
-            updatables[i].PumpedFixedUpdate();
+            updateables[i].PumpedFixedUpdate();
         }
     }
 
@@ -35,6 +39,7 @@ public class Game : MonoBehaviour
 
     }
 }
+
 
 public enum HumanType
 {
