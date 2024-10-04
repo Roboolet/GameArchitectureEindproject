@@ -1,14 +1,19 @@
 using UnityEngine;
 
-
-// IUpdatable
 public class Human : IBrainInterface
 {
-    GameObject gameObject;
-    Rigidbody rb;
+    public GameObject gameObject;
+    private Rigidbody rb;
 
-    public SensoryData SensoryEvent { get; private set; }
+    public Human()
+    {
+        gameObject = new GameObject();
+    }
 
+    public IBrainInterface.SensoryEvent sensoryEvent { get; private set; }
+    
+    // Receives input from controller, processes which method to call 
+    // depending on the InputCommand _command input.
     public void ReceiveInputCommand(InputCommand _command)
     {
         switch(_command.action)
@@ -29,19 +34,25 @@ public class Human : IBrainInterface
 
     private void Move(InputCommand _command)
     {
-        // Move implementation
         rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
     }
 
     private void Jump(InputCommand _command)
     {
-        // Jump implementation
-        rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
+        if (IsGrounded())
+        {
+            rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
+        }
     }
 
     private void Dash(InputCommand _command)
     {
-        // Dash implementation
         rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
+    }
+
+
+    private bool IsGrounded()
+    {
+        return Physics.Raycast(gameObject.transform.position, Vector3.down, 0.1f);
     }
 }
