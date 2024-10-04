@@ -30,6 +30,7 @@ public enum InputCommandAction
 
 public interface IBrainInterface
 {
-    SensoryData SensoryEvent { get; }
+    public delegate SensoryData SensoryEvent();
+    public SensoryEvent sensoryEvent { get; }
     public void ReceiveInputCommand(InputCommand _command);
 }
