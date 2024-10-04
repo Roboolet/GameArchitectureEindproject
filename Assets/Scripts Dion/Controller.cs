@@ -1,7 +1,6 @@
 using UnityEngine;
 
-// : IUpdateable
-public abstract class Controller
+public abstract class Controller //: IUpdatable
 {
     protected IBrainInterface Avatar { get; set; }
     protected abstract void ProcessSensoryData(SensoryData _sensoryData);

@@ -3,11 +3,18 @@ using UnityEngine;
 public class Human : IBrainInterface
 {
     public GameObject gameObject;
-    private Rigidbody rb;
+    public Rigidbody rb;
+
+    private MoveCommand moveCommand;
+    private JumpCommand jumpCommand;
+    private DashCommand dashCommand;
 
     public Human()
     {
         gameObject = new GameObject();
+        moveCommand = new MoveCommand();
+        jumpCommand = new JumpCommand();
+        dashCommand = new DashCommand();
     }
 
     public IBrainInterface.SensoryEvent sensoryEvent { get; private set; }
@@ -19,40 +26,16 @@ public class Human : IBrainInterface
         switch(_command.action)
         {
             case InputCommandAction.MOVE:
-                Move(_command);
+                moveCommand.Execute(this, _command);
                 break;
 
             case InputCommandAction.JUMP:
-                Jump(_command);
+                jumpCommand.Execute(this, _command);
                 break;
 
             case InputCommandAction.DASH:
-                Dash(_command);
+                dashCommand.Execute(this, _command);
                 break;
         }
-    }
-
-    private void Move(InputCommand _command)
-    {
-        rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
-    }
-
-    private void Jump(InputCommand _command)
-    {
-        if (IsGrounded())
-        {
-            rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
-        }
-    }
-
-    private void Dash(InputCommand _command)
-    {
-        rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
-    }
-
-
-    private bool IsGrounded()
-    {
-        return Physics.Raycast(gameObject.transform.position, Vector3.down, 0.1f);
     }
 }
