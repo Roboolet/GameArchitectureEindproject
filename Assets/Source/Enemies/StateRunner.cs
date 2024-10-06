@@ -10,6 +10,12 @@ public class StateRunner<T>
     private IStateRunnerBehaviour<T> behaviour;
     private Dictionary<Type, List<IStateRunnerTransition<T>>> transitions;
 
+    public StateRunner(T _owner, IStateRunnerBehaviour<T> _initialBehaviour)
+    {
+        owner = _owner;
+        behaviour = _initialBehaviour;
+    }
+
     public void Update()
     {
         behaviour.OnUpdate(owner);
@@ -53,7 +59,7 @@ public class StateRunner<T>
 
 public interface IStateRunnerTransition<T>
 {
-    public IStateRunnerBehaviour<T> NextBehaviour { get; protected set; }
+    public IStateRunnerBehaviour<T> NextBehaviour { get; set; }
     public bool Inverted { get; set; }
     public bool CheckRequirements(T _owner);
 }
