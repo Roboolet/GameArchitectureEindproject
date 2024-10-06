@@ -8,6 +8,7 @@ public class Human : IBrainInterface, IUpdateable
     public Rigidbody rb;
     public bool IsOnGround { get; private set;}
     public bool HasJump { get; set; }
+    public bool HasDash { get; set; }
 
     private MoveCommand moveCommand;
     private JumpCommand jumpCommand;
@@ -47,6 +48,7 @@ public class Human : IBrainInterface, IUpdateable
         {
             IsOnGround = true;
             HasJump = true;
+            HasDash = true;
         }
         else
         {

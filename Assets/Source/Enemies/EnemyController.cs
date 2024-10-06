@@ -19,11 +19,14 @@ public class EnemyController : Controller
 
     private bool sensesConnected = false;
     private SensoryData lastSensoryUpdate;
+    private float lastGroundedTime = Mathf.Infinity;
 
     protected override void ProcessSensoryData(SensoryData _sensoryData)
     {
         lastSensoryUpdate = _sensoryData;
         humanPosition = _sensoryData.position;
+
+        if (_sensoryData.isOnGround) { lastGroundedTime = Time.time; }
     }
 
     public override void PumpedFixedUpdate()
@@ -54,6 +57,15 @@ public class EnemyController : Controller
             jumpCommand.value = 1;
             jumpCommand.normalizedDirection = Vector3.up;
             Avatar.ReceiveInputCommand(jumpCommand);
+
+            if(lastGroundedTime + 0.6f <= Time.time)
+            {
+                InputCommand dashCommand = new InputCommand();
+                jumpCommand.action = InputCommandAction.DASH;
+                jumpCommand.value = 0.7f;
+                jumpCommand.normalizedDirection = (vecToPlayer + Vector3.up).normalized;
+                Avatar.ReceiveInputCommand(jumpCommand);
+            }
         }
     }
 

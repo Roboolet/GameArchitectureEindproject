@@ -41,6 +41,10 @@ public class DashCommand : Command
 
     public override void Execute(Human _owner, InputCommand _command)
     {
-        _owner.rb.AddForce(_command.normalizedDirection * _command.value * DASH_SPEED, ForceMode.Impulse);
+        if (_owner.HasDash)
+        {
+            _owner.rb.AddForce(_command.normalizedDirection * _command.value * DASH_SPEED, ForceMode.Impulse);
+            _owner.HasDash = false;
+        }
     }
 }

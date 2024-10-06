@@ -12,8 +12,6 @@ public abstract class Controller : IUpdateable
 
 public class PlayerController : Controller
 {
-    private float cooldown = 0;
-
     private Camera cam;
 
     protected override void ProcessSensoryData(SensoryData _sensoryData)
@@ -33,12 +31,9 @@ public class PlayerController : Controller
         {
             Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.JUMP, Vector3.up, 1));
         }
-
-        cooldown -= Time.deltaTime;
-        if (Input.GetKeyDown(KeyCode.LeftShift) && cooldown <= 0)
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.DASH, cam.transform.forward, 1));
-            cooldown = 3;
         }
     }
 
