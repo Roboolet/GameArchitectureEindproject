@@ -18,9 +18,11 @@ public class EnemyController : Controller
     private PathingNode intermediateTarget;
 
     private bool sensesConnected = false;
+    private SensoryData lastSensoryUpdate;
 
     protected override void ProcessSensoryData(SensoryData _sensoryData)
     {
+        lastSensoryUpdate = _sensoryData;
         humanPosition = _sensoryData.position;
     }
 
@@ -34,13 +36,25 @@ public class EnemyController : Controller
             intermediateTarget = FindNextPathNode();
         }
 
+        Vector3 vecToPlayer = (intermediateTarget.position - humanPosition).normalized;
+
         // walk
         InputCommand walkCommand = new InputCommand();
         walkCommand.action = InputCommandAction.MOVE;
-        walkCommand.value = 1;
-        walkCommand.normalizedDirection =
-            (intermediateTarget.position - humanPosition).normalized;
+        walkCommand.value = 0.8f;
+        walkCommand.normalizedDirection = vecToPlayer
+            ;
         Avatar.ReceiveInputCommand(walkCommand);
+
+        // jump
+        if (!lastSensoryUpdate.isOnGround)
+        {
+            InputCommand jumpCommand = new InputCommand();
+            jumpCommand.action = InputCommandAction.JUMP;
+            jumpCommand.value = 1;
+            jumpCommand.normalizedDirection = Vector3.up;
+            Avatar.ReceiveInputCommand(jumpCommand);
+        }
     }
 
     public override void PumpedUpdate()

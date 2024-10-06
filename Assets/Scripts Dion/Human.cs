@@ -6,7 +6,8 @@ public class Human : IBrainInterface, IUpdateable
 {
     public GameObject gameObject;
     public Rigidbody rb;
-    public bool isOnGround;
+    public bool IsOnGround { get; private set;}
+    public bool HasJump { get; set; }
 
     private MoveCommand moveCommand;
     private JumpCommand jumpCommand;
@@ -26,7 +27,7 @@ public class Human : IBrainInterface, IUpdateable
     public void PumpedFixedUpdate()
     {
         // gravity
-        if (!isOnGround)
+        if (!IsOnGround)
         {
             rb.AddForce(Vector3.down * GRAVITY_SCALE, ForceMode.Impulse);
         }
@@ -35,7 +36,7 @@ public class Human : IBrainInterface, IUpdateable
         SensoryData data = new SensoryData();
         data.position = gameObject.transform.position;
         data.lookRotation = gameObject.transform.rotation.y;
-        data.isOnGround = isOnGround;
+        data.isOnGround = IsOnGround;
         sensoryEvent?.Invoke(data);
     }
 
@@ -44,11 +45,12 @@ public class Human : IBrainInterface, IUpdateable
         // ground check
         if (Physics.Raycast(gameObject.transform.position, Vector3.down, 1f))
         {
-            isOnGround = true;
+            IsOnGround = true;
+            HasJump = true;
         }
         else
         {
-            isOnGround = false;
+            IsOnGround = false;
         }
     }
 

@@ -12,9 +12,6 @@ public abstract class Controller : IUpdateable
 
 public class PlayerController : Controller
 {
-    private const float SPEED = 50;
-    private const float JUMP_FORCE = 14;
-    private const float DASH_SPEED = 50;
     private float cooldown = 0;
 
     private Camera cam;
@@ -30,17 +27,17 @@ public class PlayerController : Controller
 
         Vector3 movement = cam.transform.forward * Input.GetAxis("Vertical")
             + cam.transform.right * Input.GetAxis("Horizontal");
-        Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.MOVE, movement, SPEED*Time.deltaTime));
+        Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.MOVE, movement, 1));
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.JUMP, Vector3.up, JUMP_FORCE));
+            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.JUMP, Vector3.up, 1));
         }
 
         cooldown -= Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.LeftShift) && cooldown <= 0)
         {
-            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.DASH, cam.transform.forward, DASH_SPEED));
+            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.DASH, cam.transform.forward, 1));
             cooldown = 3;
         }
     }
