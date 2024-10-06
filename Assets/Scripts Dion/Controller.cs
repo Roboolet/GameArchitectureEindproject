@@ -14,6 +14,10 @@ public class PlayerController : Controller
 {
     private Camera cam;
 
+    private bool wantsToJump = false;
+    private bool wantsToDash = false;
+    private Vector2 input;
+
     protected override void ProcessSensoryData(SensoryData _sensoryData)
     {
         
@@ -22,24 +26,36 @@ public class PlayerController : Controller
     public override void PumpedUpdate()
     {
         if(cam == null) { cam = Camera.main; }
-
-        Vector3 movement = cam.transform.forward * Input.GetAxis("Vertical")
-            + cam.transform.right * Input.GetAxis("Horizontal");
-        Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.MOVE, movement, 1));
+        input = new Vector2(Input.GetAxis("Horizontal"), Input.GetAxis("Vertical"));
 
         if (Input.GetKeyDown(KeyCode.Space))
         {
-            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.JUMP, Vector3.up, 1));
+            wantsToJump = true;
         }
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.DASH, cam.transform.forward, 1));
+            wantsToDash = true;
         }
     }
 
     // Handles player movement and abilities depending on user input.
     public override void PumpedFixedUpdate()
     {
-        
+        Vector3 movement = cam.transform.forward * input.y
+            + cam.transform.right * input.x;
+
+        Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.MOVE, movement.normalized, 1));
+
+        if (wantsToJump)
+        {
+            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.JUMP, Vector3.up, 1));
+            wantsToJump = false;
+        }
+
+        if (wantsToDash)
+        {
+            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.DASH, cam.transform.forward, 1));
+            wantsToDash = false;
+        }
     }
 }
