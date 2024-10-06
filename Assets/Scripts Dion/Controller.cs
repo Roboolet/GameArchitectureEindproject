@@ -1,11 +1,13 @@
 using UnityEngine;
 
-public abstract class Controller //: IUpdatable
+public abstract class Controller : IUpdateable
 {
     public IBrainInterface Avatar { get; set; }
     protected abstract void ProcessSensoryData(SensoryData _sensoryData);
-    protected abstract void PumpedUpdate();
-    protected abstract void PumpedFixedUpdate();
+
+    public abstract void PumpedUpdate();
+
+    public abstract void PumpedFixedUpdate();
 }
 
 public class PlayerController : Controller
@@ -20,13 +22,13 @@ public class PlayerController : Controller
         ;
     }
 
-    protected override void PumpedUpdate()
+    public override void PumpedUpdate()
     {
         ;
     }
 
     // Handles player movement and abilities depending on user input.
-    protected override void PumpedFixedUpdate()
+    public override void PumpedFixedUpdate()
     {
         Vector3 movement = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
         Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.MOVE, movement, speed));

@@ -13,7 +13,6 @@ public class Human : IBrainInterface, IUpdateable
 
     public Human()
     {
-        gameObject = new GameObject();
         moveCommand = new MoveCommand();
         jumpCommand = new JumpCommand();
         dashCommand = new DashCommand();
@@ -36,7 +35,7 @@ public class Human : IBrainInterface, IUpdateable
         // send sensory data
         SensoryData data = new SensoryData();
         data.position = gameObject.transform.position;
-        data.lookRotation = gameObject.transform.rotation.z;
+        data.lookRotation = gameObject.transform.rotation.y;
         data.isOnGround = isOnGround;
         sensoryEvent?.Invoke();
     }

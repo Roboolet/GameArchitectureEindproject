@@ -2,32 +2,41 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 public class EnemyController : Controller
 {
+    public Transform Target { get; private set; }
+
     // pathfinding constants
     private const float maximumAirGap = 2;
+    private const float intermediateTargetSuccessDistance = 3;
 
     private StateRunner<EnemyController> stateRunner;
     private Vector3 humanPosition;
-    private Vector3 endGoalPosition;
-    private PathingNode targetNode;
+    private PathingNode intermediateTarget;
 
     protected override void ProcessSensoryData(SensoryData _sensoryData)
     {
         humanPosition = _sensoryData.position;
     }
 
-    protected override void PumpedFixedUpdate()
+    public override void PumpedFixedUpdate()
     {
+        if (Target == null) { return; }
+
+        if ((humanPosition - intermediateTarget.position).sqrMagnitude
+            <= intermediateTargetSuccessDistance)
+        {
+            intermediateTarget = FindNextPathNode();
+        }
     }
 
-    protected override void PumpedUpdate()
+    public override void PumpedUpdate()
     {
         if (stateRunner == null) { CreateStateRunner(); }
 
         stateRunner.Update();
-
     }
 
     private void CreateStateRunner()
@@ -46,12 +55,22 @@ public class EnemyController : Controller
         stateRunner.AddTransition<EnemyChaseState>(transNotSeesTarget);
     }
 
+    public void MoveTowards(Transform _transform)
+    {
+        Target = _transform;        
+    }
+
+    public void Stop()
+    {
+        Target = null;
+    }
+
     private PathingNode FindNextPathNode()
     {
         PathingNode nextNode = new PathingNode();
 
-        // direct line towards end goal (the player)
-        Vector3 step = (humanPosition - endGoalPosition).normalized * PathingSystem.gridScalingFactor;
+        // direct line towards Target
+        Vector3 step = (humanPosition - Target.position).normalized * PathingSystem.gridScalingFactor;
         nextNode = GetNodeChain(step, 10)[0];
 
         // if the direct path is unsuitable, try various other lines

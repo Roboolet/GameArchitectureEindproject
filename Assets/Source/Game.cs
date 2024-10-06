@@ -18,13 +18,15 @@ public class Game : MonoBehaviour
         //Instantiates the camera class
         cam = new CameraController();
 
-        //Instantiates the camera class
-        humanSpawner = new HumanSpawner();
 
         //Creates the IUpdateables list
         updateables = new List<IUpdateable>();
         updateables.Add(cam);
 
+        //Instantiates the HumanSpawner class
+        humanSpawner = new HumanSpawner();
+        humanSpawner.Spawn(humanSpawns, out List<IUpdateable> addedUpdateables);
+        updateables.AddRange(addedUpdateables);
 
     }
 
