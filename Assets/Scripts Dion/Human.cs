@@ -50,12 +50,17 @@ public class Human : IBrainInterface, IUpdateable
         Collider[] nearbyHumans = Physics.OverlapSphere(gameObject.transform.position, 3f);
         foreach (Collider c in nearbyHumans)
         {
+            if (c.CompareTag("Finish"))
+            {
+                Game.State = GameState.Win;
+            }
             // players kill enemies, and vice versa
             // for some reason the layermask doesn't work properly, so i'm doing it like this
-            if (!c.CompareTag(gameObject.tag) && !c.CompareTag("Untagged"))
+            else if (!c.CompareTag(gameObject.tag) && !c.CompareTag("Untagged"))
             {
                 Death();
             }
+            
 
             Debug.Log("Hello?");
         }
