@@ -11,7 +11,7 @@ public class HumanSpawner
         for (int i = 0; i < _spawnInfo.Length; i++)
         {
             // create prefab
-            GameObject humanPrefab = Resources.Load<GameObject>("Human");
+            GameObject humanPrefab = Resources.Load<GameObject>("Prefabs/Human");
             GameObject instance = GameObject.Instantiate(humanPrefab,
                 _spawnInfo[i].transform.position, Quaternion.identity);
 
@@ -26,12 +26,14 @@ public class HumanSpawner
                 case HumanType.Player:
                     PlayerController pc = new PlayerController();
                     pc.Avatar = humanInstance;
+                    instance.name = "PlayerHuman";
                     _updateables.Add(pc);
                     break;
 
                 case HumanType.EnemyBasic:
                     EnemyController ec = new EnemyController();
                     ec.Avatar = humanInstance;
+                    instance.name = "EnemyHuman";
                     _updateables.Add(ec);
                     break;
             }

@@ -8,7 +8,8 @@ public class StateRunner<T>
 {
     private T owner;
     private IStateRunnerBehaviour<T> behaviour;
-    private Dictionary<Type, List<IStateRunnerTransition<T>>> transitions;
+    private Dictionary<Type, List<IStateRunnerTransition<T>>> transitions = new 
+        Dictionary<Type, List<IStateRunnerTransition<T>>>();
 
     public StateRunner(T _owner, IStateRunnerBehaviour<T> _initialBehaviour)
     {
