@@ -44,6 +44,8 @@ public class PlayerController : Controller
     // Handles player movement and abilities depending on user input.
     public override void PumpedFixedUpdate()
     {
+        if(cam == null) { return; }
+
         Vector3 movement = cam.transform.forward * input.y
             + cam.transform.right * input.x;
 

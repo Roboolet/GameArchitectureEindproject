@@ -20,9 +20,11 @@ public class Game : MonoBehaviour
     }
     public static Action<GameState> OnGameStateChanged;
 
+    [SerializeField] private SpawnInfo[] humanSpawns;
+    [SerializeField] private GameObject startCanvas, gameOverCanvas, winCanvas;
+
     private List<IUpdateable> updateables;
     private CameraController cam;
-    [SerializeField] private SpawnInfo[] humanSpawns;
     private HumanSpawner humanSpawner;
 
     void Start()
@@ -43,7 +45,7 @@ public class Game : MonoBehaviour
         
 
         OnGameStateChanged += OnStateChanged;
-        State = GameState.Playing;
+        State = GameState.Menu;
 
     }
 
@@ -74,22 +76,37 @@ public class Game : MonoBehaviour
                 Transform tf = GameObject.FindGameObjectWithTag("Player").transform;
                 cam.cam.transform.position = tf.position;
                 cam.cam.transform.parent = tf;
+
+                startCanvas.SetActive(false);
+                gameOverCanvas.SetActive(false);
+                winCanvas.SetActive(false);
                 break;
+
             case GameState.Paused:
             case GameState.Dead:
                 cam.cam.transform.position = Vector3.up * 10;
                 cam.cam.transform.parent = null;
+                gameOverCanvas.SetActive(true);
                 break;
+
             case GameState.Menu:
+                startCanvas.SetActive(true);
+                gameOverCanvas.SetActive(false);
+                winCanvas.SetActive(false);
                 break;
+
             case GameState.Win:
+                cam.cam.transform.position = Vector3.up * 10;
+                cam.cam.transform.parent = null;
+
+                winCanvas.SetActive(true);
                 break;
         }
     }
 
     public void StartButton()
     {
-
+        State = GameState.Playing;
     }
 
     public void QuitButton()
