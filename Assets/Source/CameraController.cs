@@ -6,14 +6,10 @@ public class CameraController : IUpdateable
      
 {
     public Camera cam = null;
-    //[SerializeField] Transform playerCamera = null;
-    [SerializeField] float mouseSensitivity = 3.5f;
-    [SerializeField][Range(0.0f, 0.5f)] float mouseSmoothTime = 0.03f;
-    [SerializeField] bool lockCursor = true;
+    private float mouseSensitivity = 3.5f;
+    private float mouseSmoothTime = 0.03f;
 
-    float cameraPitch = 0.0f;
-    float velocityY = 0.0f;
-    CharacterController controller = null;
+    private float cameraPitch = 0.0f;
 
     Vector2 currentMouseDelta = Vector2.zero;
     Vector2 currentMouseDeltaVelocity = Vector2.zero;
@@ -39,11 +35,13 @@ public class CameraController : IUpdateable
 
         cameraPitch = Mathf.Clamp(cameraPitch, -90.0f, 90.0f);
 
-        cam.transform.localEulerAngles = Vector3.right * cameraPitch;
+        float tilt = cam.transform.localEulerAngles.y + currentMouseDelta.x * mouseSensitivity;
 
-        cam.transform.Rotate(Vector3.up * currentMouseDelta.x * mouseSensitivity);
+        cam.transform.localEulerAngles = new Vector3(cameraPitch, tilt, 0.0f);
 
-        Debug.Log("all good boss");
+
+
+        Debug.Log(currentMouseDelta.x * mouseSensitivity);
 
 
     }
