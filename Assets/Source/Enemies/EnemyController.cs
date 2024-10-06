@@ -17,11 +17,10 @@ public class EnemyController : Controller
     private StateRunner<EnemyController> stateRunner;
     private PathingNode intermediateTarget;
 
-    private bool sensesConnected = false;
     private SensoryData lastSensoryUpdate;
     private float lastGroundedTime = Mathf.Infinity;
 
-    protected override void ProcessSensoryData(SensoryData _sensoryData)
+    public override void ProcessSensoryData(SensoryData _sensoryData)
     {
         lastSensoryUpdate = _sensoryData;
         HumanPosition = _sensoryData.position;
@@ -71,12 +70,6 @@ public class EnemyController : Controller
 
     public override void PumpedUpdate()
     {
-        if (!sensesConnected)
-        {
-            sensesConnected = true;
-            Avatar.sensoryEvent += ProcessSensoryData;
-        }
-
         if (stateRunner == null) { CreateStateRunner(); }
 
         stateRunner.Update();

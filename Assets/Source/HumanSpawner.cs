@@ -26,16 +26,19 @@ public class HumanSpawner
                 case HumanType.Player:
                     PlayerController pc = new PlayerController();
                     pc.Avatar = humanInstance;
-                    instance.name = "PlayerHuman";
+                    humanInstance.sensoryEvent += pc.ProcessSensoryData;
 
                     // forgive me
                     instance.tag = "Player";
+                    instance.name = "PlayerHuman";
                     _updateables.Add(pc);
                     break;
 
                 case HumanType.EnemyBasic:
                     EnemyController ec = new EnemyController();
                     ec.Avatar = humanInstance;
+                    humanInstance.sensoryEvent += ec.ProcessSensoryData;
+
                     instance.name = "EnemyHuman";
                     _updateables.Add(ec);
                     break;

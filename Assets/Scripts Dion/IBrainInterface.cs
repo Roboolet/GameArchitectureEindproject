@@ -20,6 +20,7 @@ public struct SensoryData
     public Vector3 position;
     public float lookRotation;
     public bool isOnGround;
+    public bool isAlive;
 }
 
 public enum InputCommandAction

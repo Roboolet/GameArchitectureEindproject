@@ -8,6 +8,8 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
+    public static GameState State { get; set; }
+
     private List<IUpdateable> updateables;
     private CameraController cam;
     [SerializeField] private SpawnInfo[] humanSpawns;
@@ -36,6 +38,7 @@ public class Game : MonoBehaviour
 
     public void Update()
     {
+        if (State != GameState.Playing) { return; }
         for (int i = 0; i < updateables.Count; i++)
         {
             updateables[i].PumpedUpdate();
@@ -45,6 +48,7 @@ public class Game : MonoBehaviour
 
     public void FixedUpdate()
     {
+        if (State != GameState.Playing) { return; }
         for (int i = 0; i < updateables.Count; i++)
         {
             updateables[i].PumpedFixedUpdate();
@@ -72,5 +76,6 @@ public enum GameState
 {
     Menu,
     Playing,
+    Dead,
     Paused
 }

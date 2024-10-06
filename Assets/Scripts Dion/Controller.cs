@@ -3,7 +3,7 @@ using UnityEngine;
 public abstract class Controller : IUpdateable
 {
     public IBrainInterface Avatar { get; set; }
-    protected abstract void ProcessSensoryData(SensoryData _sensoryData);
+    public abstract void ProcessSensoryData(SensoryData _sensoryData);
 
     public abstract void PumpedUpdate();
 
@@ -18,9 +18,12 @@ public class PlayerController : Controller
     private bool wantsToDash = false;
     private Vector2 input;
 
-    protected override void ProcessSensoryData(SensoryData _sensoryData)
+    public override void ProcessSensoryData(SensoryData _sensoryData)
     {
-        
+        if (!_sensoryData.isAlive)
+        {
+            Game.State = GameState.Dead;
+        }
     }
 
     public override void PumpedUpdate()

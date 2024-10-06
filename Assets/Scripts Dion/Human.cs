@@ -14,6 +14,8 @@ public class Human : IBrainInterface, IUpdateable
     private JumpCommand jumpCommand;
     private DashCommand dashCommand;
 
+    private bool isAlive = true;
+
     private const float GRAVITY_SCALE = 0.7f;
 
     public Human()
@@ -27,6 +29,14 @@ public class Human : IBrainInterface, IUpdateable
 
     public void PumpedFixedUpdate()
     {
+        if (!isAlive)
+        {
+            SensoryData deadData = new SensoryData();
+            deadData.isAlive = false;
+            sensoryEvent?.Invoke(deadData);
+            return;
+        }
+
         // gravity
         if (!IsOnGround)
         {
@@ -38,11 +48,14 @@ public class Human : IBrainInterface, IUpdateable
         data.position = gameObject.transform.position;
         data.lookRotation = gameObject.transform.rotation.y;
         data.isOnGround = IsOnGround;
+        data.isAlive = true;
         sensoryEvent?.Invoke(data);
     }
 
     public void PumpedUpdate()
     {
+        if (!isAlive) { return; }
+
         // ground check
         if (Physics.Raycast(gameObject.transform.position, Vector3.down, 1f))
         {
@@ -54,6 +67,12 @@ public class Human : IBrainInterface, IUpdateable
         {
             IsOnGround = false;
         }
+    }
+
+    public void Death()
+    {
+        gameObject.transform.parent = null;
+        GameObject.Destroy(gameObject);
     }
 
     // Receives input from controller, processes which method to call 
