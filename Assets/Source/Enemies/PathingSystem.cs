@@ -6,8 +6,8 @@ public static class PathingSystem
 {
     // the scaling used to calculate what node is what index
     // for instance, a factor of 0.5f would make index 1 land on 0.5, and index 2 on 1, etc
-    public const float gridScalingFactor = 0.5f;
-    private const int gridSizeHori = 50, gridSizeVert = 30;
+    public const float GRID_SCALING_FACTOR = 0.5f;
+    private const int GRID_SIZE_HORIZONTAL = 50, GRID_SIZE_VERTICAL = 30;
 
     private static PathingNode[][][] nodeGrid;
 
@@ -16,28 +16,28 @@ public static class PathingSystem
         int counter = 0;
 
         // initialize jagged array
-        nodeGrid = new PathingNode[gridSizeHori][][];
-        for(int x = 0; x < gridSizeHori; x++)
+        nodeGrid = new PathingNode[GRID_SIZE_HORIZONTAL][][];
+        for(int x = 0; x < GRID_SIZE_HORIZONTAL; x++)
         {
-            nodeGrid[x] = new PathingNode[gridSizeVert][];            
+            nodeGrid[x] = new PathingNode[GRID_SIZE_VERTICAL][];            
         }
-        for (int x = 0; x < gridSizeHori; x++)
+        for (int x = 0; x < GRID_SIZE_HORIZONTAL; x++)
         {
-            for (int y = 0; y < gridSizeVert; y++)
+            for (int y = 0; y < GRID_SIZE_VERTICAL; y++)
             {
-                nodeGrid[x][y] = new PathingNode[gridSizeHori];
+                nodeGrid[x][y] = new PathingNode[GRID_SIZE_HORIZONTAL];
             }
         }
 
         // create nodes
-        for(int x = 0; x < gridSizeHori; x++)
+        for(int x = 0; x < GRID_SIZE_HORIZONTAL; x++)
         {
-            for (int y = 0; y < gridSizeVert; y++)
+            for (int y = 0; y < GRID_SIZE_VERTICAL; y++)
             {
-                for (int z = 0; z < gridSizeHori; z++)
+                for (int z = 0; z < GRID_SIZE_HORIZONTAL; z++)
                 {
-                    Vector3 vec = new Vector3(x*gridScalingFactor, 
-                        y*gridScalingFactor, z*gridScalingFactor);
+                    Vector3 vec = new Vector3(x*GRID_SCALING_FACTOR, 
+                        y*GRID_SCALING_FACTOR, z*GRID_SCALING_FACTOR);
 
                     // do check here to decide what type of node needs to be created
                     // maybe an overlapbox?
@@ -61,14 +61,14 @@ public static class PathingSystem
         if(nodeGrid == null) { RefreshNodes(); }
 
         // divide position by scaling, then round that number to get the index
-        int x = Mathf.RoundToInt(worldPosition.x / gridScalingFactor);
-        int y = Mathf.RoundToInt(worldPosition.y / gridScalingFactor);
-        int z = Mathf.RoundToInt(worldPosition.z / gridScalingFactor);
+        int x = Mathf.RoundToInt(worldPosition.x / GRID_SCALING_FACTOR);
+        int y = Mathf.RoundToInt(worldPosition.y / GRID_SCALING_FACTOR);
+        int z = Mathf.RoundToInt(worldPosition.z / GRID_SCALING_FACTOR);
 
         // clamp values that fall outside of grid range
-        x = Mathf.Clamp(x, 0, gridSizeHori);
-        y = Mathf.Clamp(y, 0, gridSizeVert);
-        z = Mathf.Clamp(z, 0, gridSizeHori);
+        x = Mathf.Clamp(x, 0, GRID_SIZE_HORIZONTAL);
+        y = Mathf.Clamp(y, 0, GRID_SIZE_VERTICAL);
+        z = Mathf.Clamp(z, 0, GRID_SIZE_HORIZONTAL);
 
         return nodeGrid[x][y][z];
     }

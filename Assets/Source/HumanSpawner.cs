@@ -27,6 +27,9 @@ public class HumanSpawner
                     PlayerController pc = new PlayerController();
                     pc.Avatar = humanInstance;
                     instance.name = "PlayerHuman";
+
+                    // forgive me
+                    instance.tag = "Player";
                     _updateables.Add(pc);
                     break;
 

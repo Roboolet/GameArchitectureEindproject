@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public struct InputCommand
@@ -30,7 +31,6 @@ public enum InputCommandAction
 
 public interface IBrainInterface
 {
-    public delegate SensoryData SensoryEvent();
-    public SensoryEvent sensoryEvent { get; }
+    public Action<SensoryData> sensoryEvent { get; set; }
     public void ReceiveInputCommand(InputCommand _command);
 }

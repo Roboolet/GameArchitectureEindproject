@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -9,12 +10,14 @@ public class EnemyController : Controller
     public Transform Target { get; private set; }
 
     // pathfinding constants
-    private const float maximumAirGap = 2;
-    private const float intermediateTargetSuccessDistance = 3;
+    private const float MAXIMUM_AIR_GAP = 2;
+    private const float INTERMEDIATE_TARGET_DISTANCE_REQUIRED = 3;
 
     private StateRunner<EnemyController> stateRunner;
     private Vector3 humanPosition;
     private PathingNode intermediateTarget;
+
+    private bool sensesConnected = false;
 
     protected override void ProcessSensoryData(SensoryData _sensoryData)
     {
@@ -26,14 +29,28 @@ public class EnemyController : Controller
         if (Target == null) { return; }
 
         if ((humanPosition - intermediateTarget.position).sqrMagnitude
-            <= intermediateTargetSuccessDistance)
+            <= INTERMEDIATE_TARGET_DISTANCE_REQUIRED)
         {
             intermediateTarget = FindNextPathNode();
         }
+
+        // walk
+        InputCommand walkCommand = new InputCommand();
+        walkCommand.action = InputCommandAction.MOVE;
+        walkCommand.value = 1;
+        walkCommand.normalizedDirection =
+            (humanPosition - intermediateTarget.position).normalized;
+        Avatar.ReceiveInputCommand(walkCommand);
     }
 
     public override void PumpedUpdate()
     {
+        if (!sensesConnected)
+        {
+            sensesConnected = true;
+            Avatar.sensoryEvent += ProcessSensoryData;
+        }
+
         if (stateRunner == null) { CreateStateRunner(); }
 
         stateRunner.Update();
@@ -70,7 +87,7 @@ public class EnemyController : Controller
         PathingNode nextNode = new PathingNode();
 
         // direct line towards Target
-        Vector3 step = (humanPosition - Target.position).normalized * PathingSystem.gridScalingFactor;
+        Vector3 step = (humanPosition - Target.position).normalized * PathingSystem.GRID_SCALING_FACTOR;
         nextNode = GetNodeChain(step, 10)[0];
 
         // if the direct path is unsuitable, try various other lines
@@ -103,9 +120,16 @@ public class EnemyIdleState : IStateRunnerBehaviour<EnemyController>
 
 public class EnemyChaseState : IStateRunnerBehaviour<EnemyController>
 {
-    public void OnEnter(EnemyController _owner) { Debug.Log("Enemy entering Chase"); }
+    public void OnEnter(EnemyController _owner)
+    {
+        Debug.Log("Enemy entering Chase");
+        _owner.MoveTowards(GameObject.FindGameObjectWithTag("Player").transform);
+    }
 
-    public void OnExit(EnemyController _owner) { }
+    public void OnExit(EnemyController _owner)
+    {
+        _owner.Stop();
+    }
 
     public void OnUpdate(EnemyController _owner) { }
 }

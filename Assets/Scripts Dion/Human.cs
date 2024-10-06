@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 using static UnityEngine.UI.GridLayoutGroup;
 
@@ -18,7 +19,7 @@ public class Human : IBrainInterface, IUpdateable
         dashCommand = new DashCommand();
     }
 
-    public IBrainInterface.SensoryEvent sensoryEvent { get; private set; }
+    public Action<SensoryData> sensoryEvent { get; set; }
 
     public void PumpedFixedUpdate()
     {
@@ -37,7 +38,7 @@ public class Human : IBrainInterface, IUpdateable
         data.position = gameObject.transform.position;
         data.lookRotation = gameObject.transform.rotation.y;
         data.isOnGround = isOnGround;
-        sensoryEvent?.Invoke();
+        sensoryEvent?.Invoke(data);
     }
 
     public void PumpedUpdate()
