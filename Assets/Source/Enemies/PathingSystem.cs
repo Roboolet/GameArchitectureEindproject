@@ -42,7 +42,7 @@ public static class PathingSystem
                     // do check here to decide what type of node needs to be created
                     // maybe an overlapbox?
 
-                    nodeGrid[x][y][z] = new PathingNode(PathingNodeType.AIR);
+                    nodeGrid[x][y][z] = new PathingNode(PathingNodeType.AIR, vec);
                     counter++;
                 }
             }
@@ -76,11 +76,13 @@ public static class PathingSystem
 
 public struct PathingNode
 {
+    public Vector3 position;
     public PathingNodeType type;
 
-    public PathingNode(PathingNodeType _type)
+    public PathingNode(PathingNodeType _type, Vector3 _position)
     {
         type = _type;
+        position = _position;
     }
 }
 
