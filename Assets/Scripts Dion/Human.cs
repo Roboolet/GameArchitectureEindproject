@@ -12,6 +12,8 @@ public class Human : IBrainInterface, IUpdateable
     private JumpCommand jumpCommand;
     private DashCommand dashCommand;
 
+    private const float GRAVITY_SCALE = 0.7f;
+
     public Human()
     {
         moveCommand = new MoveCommand();
@@ -23,6 +25,12 @@ public class Human : IBrainInterface, IUpdateable
 
     public void PumpedFixedUpdate()
     {
+        // gravity
+        if (!isOnGround)
+        {
+            rb.AddForce(Vector3.down * GRAVITY_SCALE, ForceMode.Impulse);
+        }
+
         // send sensory data
         SensoryData data = new SensoryData();
         data.position = gameObject.transform.position;

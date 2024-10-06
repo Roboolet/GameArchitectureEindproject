@@ -13,8 +13,8 @@ public abstract class Controller : IUpdateable
 public class PlayerController : Controller
 {
     private const float SPEED = 50;
-    private const float JUMP_FORCE = 10;
-    private const float DASH_SPEED = 10;
+    private const float JUMP_FORCE = 14;
+    private const float DASH_SPEED = 50;
     private float cooldown = 0;
 
     private Camera cam;
@@ -40,7 +40,7 @@ public class PlayerController : Controller
         cooldown -= Time.deltaTime;
         if (Input.GetKeyDown(KeyCode.LeftShift) && cooldown <= 0)
         {
-            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.DASH, Vector3.forward, DASH_SPEED));
+            Avatar.ReceiveInputCommand(new InputCommand(InputCommandAction.DASH, cam.transform.forward, DASH_SPEED));
             cooldown = 3;
         }
     }
