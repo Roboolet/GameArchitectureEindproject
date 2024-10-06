@@ -41,13 +41,13 @@ public class EnemyController : Controller
             intermediateTarget = FindNextPathNode();
         }
 
-        Vector3 vecToPlayer = (intermediateTarget.position - humanPosition).normalized;
+        Vector3 vecToIntermediate = (intermediateTarget.position - humanPosition).normalized;
 
         // walk
         InputCommand walkCommand = new InputCommand();
         walkCommand.action = InputCommandAction.MOVE;
-        walkCommand.value = 0.8f;
-        walkCommand.normalizedDirection = vecToPlayer
+        walkCommand.value = 0.75f;
+        walkCommand.normalizedDirection = vecToIntermediate
             ;
         Avatar.ReceiveInputCommand(walkCommand);
 
@@ -64,8 +64,8 @@ public class EnemyController : Controller
             {
                 InputCommand dashCommand = new InputCommand();
                 jumpCommand.action = InputCommandAction.DASH;
-                jumpCommand.value = 0.7f;
-                jumpCommand.normalizedDirection = (vecToPlayer + Vector3.up).normalized;
+                jumpCommand.value = 0.65f;
+                jumpCommand.normalizedDirection = (vecToIntermediate + Vector3.up).normalized;
                 Avatar.ReceiveInputCommand(jumpCommand);
             }
         }
