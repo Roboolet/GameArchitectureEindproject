@@ -66,9 +66,9 @@ public static class PathingSystem
         int z = Mathf.RoundToInt(worldPosition.z / GRID_SCALING_FACTOR);
 
         // clamp values that fall outside of grid range
-        x = Mathf.Clamp(x, 0, GRID_SIZE_HORIZONTAL);
-        y = Mathf.Clamp(y, 0, GRID_SIZE_VERTICAL);
-        z = Mathf.Clamp(z, 0, GRID_SIZE_HORIZONTAL);
+        x = Mathf.Clamp(x, 0, GRID_SIZE_HORIZONTAL-1);
+        y = Mathf.Clamp(y, 0, GRID_SIZE_VERTICAL-1);
+        z = Mathf.Clamp(z, 0, GRID_SIZE_HORIZONTAL-1);
 
         return nodeGrid[x][y][z];
     }

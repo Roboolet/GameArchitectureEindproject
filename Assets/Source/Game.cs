@@ -18,7 +18,6 @@ public class Game : MonoBehaviour
         //Instantiates the camera class
         cam = new CameraController();
 
-
         //Creates the IUpdateables list
         updateables = new List<IUpdateable>();
         updateables.Add(cam);
@@ -27,6 +26,11 @@ public class Game : MonoBehaviour
         humanSpawner = new HumanSpawner();
         humanSpawner.Spawn(humanSpawns, out List<IUpdateable> addedUpdateables);
         updateables.AddRange(addedUpdateables);
+
+        // put camera on player
+        Transform tf = GameObject.FindGameObjectWithTag("Player").transform;
+        cam.cam.transform.position = tf.position;
+        cam.cam.transform.parent = tf;
 
     }
 

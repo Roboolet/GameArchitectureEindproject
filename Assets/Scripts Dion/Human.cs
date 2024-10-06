@@ -23,16 +23,6 @@ public class Human : IBrainInterface, IUpdateable
 
     public void PumpedFixedUpdate()
     {
-        // ground check
-        if (Physics.Raycast(gameObject.transform.position, Vector3.down, 0.1f))
-        {
-            isOnGround = true;
-        }
-        else 
-        { 
-            isOnGround = false; 
-        }
-
         // send sensory data
         SensoryData data = new SensoryData();
         data.position = gameObject.transform.position;
@@ -43,6 +33,15 @@ public class Human : IBrainInterface, IUpdateable
 
     public void PumpedUpdate()
     {
+        // ground check
+        if (Physics.Raycast(gameObject.transform.position, Vector3.down, 1f))
+        {
+            isOnGround = true;
+        }
+        else
+        {
+            isOnGround = false;
+        }
     }
 
     // Receives input from controller, processes which method to call 

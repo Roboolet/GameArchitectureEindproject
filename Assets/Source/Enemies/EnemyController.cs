@@ -39,7 +39,7 @@ public class EnemyController : Controller
         walkCommand.action = InputCommandAction.MOVE;
         walkCommand.value = 1;
         walkCommand.normalizedDirection =
-            (humanPosition - intermediateTarget.position).normalized;
+            (intermediateTarget.position - humanPosition).normalized;
         Avatar.ReceiveInputCommand(walkCommand);
     }
 
@@ -87,7 +87,7 @@ public class EnemyController : Controller
         PathingNode nextNode = new PathingNode();
 
         // direct line towards Target
-        Vector3 step = (humanPosition - Target.position).normalized * PathingSystem.GRID_SCALING_FACTOR;
+        Vector3 step = (Target.position - humanPosition).normalized * PathingSystem.GRID_SCALING_FACTOR;
         nextNode = GetNodeChain(step, 10)[0];
 
         // if the direct path is unsuitable, try various other lines
