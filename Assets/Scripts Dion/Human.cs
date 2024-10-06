@@ -29,13 +29,7 @@ public class Human : IBrainInterface, IUpdateable
 
     public void PumpedFixedUpdate()
     {
-        if (!isAlive)
-        {
-            SensoryData deadData = new SensoryData();
-            deadData.isAlive = false;
-            sensoryEvent?.Invoke(deadData);
-            return;
-        }
+        if (!isAlive){ return; }
 
         // gravity
         if (!IsOnGround)
@@ -71,7 +65,11 @@ public class Human : IBrainInterface, IUpdateable
 
     public void Death()
     {
-        gameObject.transform.parent = null;
+        isAlive = false;
+        SensoryData deadData = new SensoryData();
+        deadData.isAlive = false;
+        sensoryEvent?.Invoke(deadData);
+
         GameObject.Destroy(gameObject);
     }
 

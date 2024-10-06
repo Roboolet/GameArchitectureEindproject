@@ -8,7 +8,17 @@ using UnityEngine.SceneManagement;
 
 public class Game : MonoBehaviour
 {
-    public static GameState State { get; set; }
+    private static GameState _State;
+    public static GameState State
+    {
+        get { return _State; }
+        set
+        {
+            _State = value;
+            OnGameStateChanged?.Invoke(value);
+        }
+    }
+    public static Action<GameState> OnGameStateChanged;
 
     private List<IUpdateable> updateables;
     private CameraController cam;
@@ -30,9 +40,10 @@ public class Game : MonoBehaviour
         updateables.AddRange(addedUpdateables);
 
         // put camera on player
-        Transform tf = GameObject.FindGameObjectWithTag("Player").transform;
-        cam.cam.transform.position = tf.position;
-        cam.cam.transform.parent = tf;
+        
+
+        OnGameStateChanged += OnStateChanged;
+        State = GameState.Playing;
 
     }
 
@@ -55,6 +66,26 @@ public class Game : MonoBehaviour
         }
     }
 
+    private void OnStateChanged(GameState _newState)
+    {
+        switch (_newState)
+        {
+            case GameState.Playing:
+                Transform tf = GameObject.FindGameObjectWithTag("Player").transform;
+                cam.cam.transform.position = tf.position;
+                cam.cam.transform.parent = tf;
+                break;
+            case GameState.Paused:
+            case GameState.Dead:
+                cam.cam.transform.position = Vector3.up * 10;
+                cam.cam.transform.parent = null;
+                break;
+            case GameState.Menu:
+                break;
+            case GameState.Win:
+                break;
+        }
+    }
 
     public void StartButton()
     {
@@ -77,5 +108,6 @@ public enum GameState
     Menu,
     Playing,
     Dead,
-    Paused
+    Paused,
+    Win
 }
