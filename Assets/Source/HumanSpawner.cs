@@ -45,6 +45,7 @@ public enum HumanType
     EnemyBasic
 }
 
+[System.Serializable]
 public struct SpawnInfo
 {
     public HumanType spawnType;

@@ -10,7 +10,7 @@ public class Game : MonoBehaviour
 {
     private List<IUpdateable> updateables;
     private CameraController cam;
-    private static SpawnInfo[] humanSpawns;
+    [SerializeField] private SpawnInfo[] humanSpawns;
     private HumanSpawner humanSpawner;
 
     void Start()
