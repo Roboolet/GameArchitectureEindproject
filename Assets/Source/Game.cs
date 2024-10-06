@@ -41,9 +41,7 @@ public class Game : MonoBehaviour
         humanSpawner.Spawn(humanSpawns, out List<IUpdateable> addedUpdateables);
         updateables.AddRange(addedUpdateables);
 
-        // put camera on player
-        
-
+        // put camera on player   
         OnGameStateChanged += OnStateChanged;
         State = GameState.Menu;
 

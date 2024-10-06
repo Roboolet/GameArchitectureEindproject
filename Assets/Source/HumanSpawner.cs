@@ -39,6 +39,7 @@ public class HumanSpawner
                     ec.Avatar = humanInstance;
                     humanInstance.sensoryEvent += ec.ProcessSensoryData;
 
+                    instance.tag = "Enemy";
                     instance.name = "EnemyHuman";
                     _updateables.Add(ec);
                     break;

@@ -29,7 +29,7 @@ public class Human : IBrainInterface, IUpdateable
 
     public void PumpedFixedUpdate()
     {
-        if (!isAlive){ return; }
+        if (!isAlive) { return; }
 
         // gravity
         if (!IsOnGround)
@@ -44,6 +44,21 @@ public class Human : IBrainInterface, IUpdateable
         data.isOnGround = IsOnGround;
         data.isAlive = true;
         sensoryEvent?.Invoke(data);
+
+        // death checks
+        if (gameObject.transform.position.y <= -10) { Death(); }
+        Collider[] nearbyHumans = Physics.OverlapSphere(gameObject.transform.position, 3f);
+        foreach (Collider c in nearbyHumans)
+        {
+            // players kill enemies, and vice versa
+            // for some reason the layermask doesn't work properly, so i'm doing it like this
+            if (!c.CompareTag(gameObject.tag) && !c.CompareTag("Untagged"))
+            {
+                Death();
+            }
+
+            Debug.Log("Hello?");
+        }
     }
 
     public void PumpedUpdate()
