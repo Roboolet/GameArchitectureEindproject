@@ -33,6 +33,8 @@ public class EnemyController : Controller
     {
         if (Target == null) { return; }
 
+        Debug.Log(intermediateTarget.position);
+
         if ((humanPosition - intermediateTarget.position).sqrMagnitude
             <= INTERMEDIATE_TARGET_DISTANCE_REQUIRED)
         {
@@ -100,7 +102,8 @@ public class EnemyController : Controller
 
     public void MoveTowards(Transform _transform)
     {
-        Target = _transform;        
+        Target = _transform;
+        intermediateTarget = FindNextPathNode();
     }
 
     public void Stop()
@@ -114,7 +117,7 @@ public class EnemyController : Controller
 
         // direct line towards Target
         Vector3 step = (Target.position - humanPosition).normalized * PathingSystem.GRID_SCALING_FACTOR;
-        nextNode = GetNodeChain(step, 10)[0];
+        nextNode = GetNodeChain(step, 10)[2];
 
         // if the direct path is unsuitable, try various other lines
 
@@ -149,7 +152,6 @@ public class EnemyChaseState : IStateRunnerBehaviour<EnemyController>
     public void OnEnter(EnemyController _owner)
     {
         Debug.Log("Enemy entering Chase");
-        _owner.MoveTowards(GameObject.FindGameObjectWithTag("Player").transform);
     }
 
     public void OnExit(EnemyController _owner)
@@ -157,7 +159,10 @@ public class EnemyChaseState : IStateRunnerBehaviour<EnemyController>
         _owner.Stop();
     }
 
-    public void OnUpdate(EnemyController _owner) { }
+    public void OnUpdate(EnemyController _owner)
+    {
+        _owner.MoveTowards(GameObject.FindGameObjectWithTag("Player").transform);
+    }
 }
 
 public class EnemySeesTarget : IStateRunnerTransition<EnemyController>

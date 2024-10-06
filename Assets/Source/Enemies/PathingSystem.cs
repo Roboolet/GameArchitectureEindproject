@@ -6,8 +6,8 @@ public static class PathingSystem
 {
     // the scaling used to calculate what node is what index
     // for instance, a factor of 0.5f would make index 1 land on 0.5, and index 2 on 1, etc
-    public const float GRID_SCALING_FACTOR = 0.5f;
-    private const int GRID_SIZE_HORIZONTAL = 50, GRID_SIZE_VERTICAL = 30;
+    public const float GRID_SCALING_FACTOR = 0.8f;
+    private const int GRID_SIZE_HORIZONTAL = 100, GRID_SIZE_VERTICAL = 20;
 
     private static PathingNode[][][] nodeGrid;
 
