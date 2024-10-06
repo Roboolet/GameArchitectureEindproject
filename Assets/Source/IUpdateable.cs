@@ -4,6 +4,8 @@ using UnityEngine;
 
 public interface IUpdateable
 {
+    //Provides substitute for lack of update functions
+
     public void PumpedUpdate();
 
     public void PumpedFixedUpdate();
