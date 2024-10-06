@@ -19,7 +19,7 @@ public class JumpCommand : Command
 {
     public override void Execute(Human _owner, InputCommand _command)
     {
-        if (Physics.Raycast(_owner.gameObject.transform.position, Vector3.down, 0.1f))
+        if (_owner.isOnGround)
         {
             _owner.rb.AddForce(_command.normalizedDirection * _command.value, ForceMode.Impulse);
         }
