@@ -5,22 +5,32 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+
 public class Game : MonoBehaviour
 {
-
-    private IUpdateable[] updateables;
+    private List<IUpdateable> updateables;
     private CameraController cam;
+    private static SpawnInfo[] humanSpawns;
+    private HumanSpawner humanSpawner;
 
     void Start()
     {
+        //Instantiates the camera class
         cam = new CameraController();
-        updateables = new IUpdateable[1];
-        updateables[0] = cam;
+
+        //Instantiates the camera class
+        humanSpawner = new HumanSpawner();
+
+        //Creates the IUpdateables list
+        updateables = new List<IUpdateable>();
+        updateables.Add(cam);
+
+
     }
 
     public void Update()
     {
-        for (int i = 0; i < updateables.Length; i++)
+        for (int i = 0; i < updateables.Count; i++)
         {
             updateables[i].PumpedUpdate();
         }
@@ -29,16 +39,13 @@ public class Game : MonoBehaviour
 
     public void FixedUpdate()
     {
-        for (int i = 0; i < updateables.Length; i++)
+        for (int i = 0; i < updateables.Count; i++)
         {
             updateables[i].PumpedFixedUpdate();
         }
     }
 
-    private void CreateHuman(HumanType _humanType) 
-    {
 
-    }
     public void StartButton()
     {
 
@@ -53,12 +60,6 @@ public class Game : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
-}
-
-public enum HumanType
-{
-    Player,
-    EnemyBasic
 }
 
 public enum GameState
