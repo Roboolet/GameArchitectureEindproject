@@ -6,6 +6,7 @@ using UnityEngine;
 public class EnemyController : Controller
 {
     private StateRunner<EnemyController> stateRunner;
+    private Vector3 targetPosition;
 
     protected override void ProcessSensoryData(SensoryData _sensoryData)
     {

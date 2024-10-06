@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class Controller //: IUpdatable
 {
-    protected IBrainInterface Avatar { get; set; }
+    public IBrainInterface Avatar { get; set; }
     protected abstract void ProcessSensoryData(SensoryData _sensoryData);
     protected abstract void PumpedUpdate();
     protected abstract void PumpedFixedUpdate();
