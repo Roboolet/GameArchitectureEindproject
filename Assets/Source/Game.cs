@@ -31,20 +31,10 @@ public class Game : MonoBehaviour
     {
         //Instantiates the camera class
         cam = new CameraController();
-
-        //Creates the IUpdateables list
-        updateables = new List<IUpdateable>();
-        updateables.Add(cam);
-
-        //Instantiates the HumanSpawner class
         humanSpawner = new HumanSpawner();
-        humanSpawner.Spawn(humanSpawns, out List<IUpdateable> addedUpdateables);
-        updateables.AddRange(addedUpdateables);
-
-        // put camera on player   
         OnGameStateChanged += OnStateChanged;
-        State = GameState.Menu;
 
+        InitializeGame();
     }
 
     public void Update()
@@ -64,6 +54,20 @@ public class Game : MonoBehaviour
         {
             updateables[i].PumpedFixedUpdate();
         }
+    }
+
+    private void InitializeGame()
+    {
+        //Creates the IUpdateables list
+        updateables = new List<IUpdateable>();
+        updateables.Add(cam);
+
+        //Instantiates the HumanSpawner class
+        humanSpawner.Spawn(humanSpawns, out List<IUpdateable> addedUpdateables);
+        updateables.AddRange(addedUpdateables);
+
+        // put camera on player   
+        State = GameState.Menu;
     }
 
     private void OnStateChanged(GameState _newState)
@@ -114,7 +118,20 @@ public class Game : MonoBehaviour
 
     public void RestartButton()
     {
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        // clean up existing players/enemies
+        GameObject[] enemies = GameObject.FindGameObjectsWithTag("Enemy");
+        for (int i = enemies.Length - 1; i >= 0; i--)
+        {
+            Destroy(enemies[i]);
+        }
+        GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
+        for (int i = players.Length - 1; i >= 0; i--)
+        {
+            Destroy(players[i]);
+        }
+
+        // spawn new ones
+        InitializeGame();
     }
 }
 

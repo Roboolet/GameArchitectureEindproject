@@ -60,9 +60,6 @@ public class Human : IBrainInterface, IUpdateable
             {
                 Death();
             }
-            
-
-            Debug.Log("Hello?");
         }
     }
 
