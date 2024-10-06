@@ -8,13 +8,13 @@ using UnityEngine.UIElements;
 public class EnemyController : Controller
 {
     public Transform Target { get; private set; }
+    public Vector3 HumanPosition { get; private set; }
 
     // pathfinding constants
     private const float MAXIMUM_AIR_GAP = 2;
     private const float INTERMEDIATE_TARGET_DISTANCE_REQUIRED = 3;
 
     private StateRunner<EnemyController> stateRunner;
-    private Vector3 humanPosition;
     private PathingNode intermediateTarget;
 
     private bool sensesConnected = false;
@@ -24,7 +24,7 @@ public class EnemyController : Controller
     protected override void ProcessSensoryData(SensoryData _sensoryData)
     {
         lastSensoryUpdate = _sensoryData;
-        humanPosition = _sensoryData.position;
+        HumanPosition = _sensoryData.position;
 
         if (_sensoryData.isOnGround) { lastGroundedTime = Time.time; }
     }
@@ -33,15 +33,13 @@ public class EnemyController : Controller
     {
         if (Target == null) { return; }
 
-        Debug.Log(intermediateTarget.position);
-
-        if ((humanPosition - intermediateTarget.position).sqrMagnitude
+        if ((HumanPosition - intermediateTarget.position).sqrMagnitude
             <= INTERMEDIATE_TARGET_DISTANCE_REQUIRED)
         {
             intermediateTarget = FindNextPathNode();
         }
 
-        Vector3 vecToIntermediate = (intermediateTarget.position - humanPosition).normalized;
+        Vector3 vecToIntermediate = (intermediateTarget.position - HumanPosition).normalized;
 
         // walk
         InputCommand walkCommand = new InputCommand();
@@ -116,7 +114,7 @@ public class EnemyController : Controller
         PathingNode nextNode = new PathingNode();
 
         // direct line towards Target
-        Vector3 step = (Target.position - humanPosition).normalized * PathingSystem.GRID_SCALING_FACTOR;
+        Vector3 step = (Target.position - HumanPosition).normalized * PathingSystem.GRID_SCALING_FACTOR;
         nextNode = GetNodeChain(step, 10)[2];
 
         // if the direct path is unsuitable, try various other lines
@@ -130,7 +128,7 @@ public class EnemyController : Controller
         for (int i = 0; i < _arrayLength; i++)
         {
             // iterate through a line and find the nearby nodes
-            Vector3 pos = humanPosition + _step * i;
+            Vector3 pos = HumanPosition + _step * i;
             nodeChain[i] = PathingSystem.GetClosestNode(pos);
         }
 
@@ -172,7 +170,24 @@ public class EnemySeesTarget : IStateRunnerTransition<EnemyController>
 
     public bool CheckRequirements(EnemyController _owner)
     {
-        return true;
+        // why does it work properly when i return true
+        // why
+        if (_owner == null || _owner.Target == null) return true;
+
+        Vector3 vecToTarget = (_owner.Target.position - _owner.HumanPosition).normalized;
+
+        // check line of sight
+        // layer 7 is the Human layer
+        if (Physics.Raycast(_owner.HumanPosition + vecToTarget * 3, vecToTarget,
+            out RaycastHit hitInfo, 100))
+        {
+            if (hitInfo.transform.CompareTag("Player"))
+            {
+                return true;
+            }
+            else return false;
+        }
+        return false;
     }
 
     public EnemySeesTarget(IStateRunnerBehaviour<EnemyController> _nextBehaviour, bool _inverted = false)
